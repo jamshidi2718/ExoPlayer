@@ -175,7 +175,6 @@ fun ExoPlayer(
 
     }
 
-    viewModel.playVideo( "https://media.b2shelf.com/tutorials/02.mp4")
 
 
 }

@@ -2,6 +2,7 @@ package ir.comeby.exoplayer.ui.videoPlayer
 
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
@@ -13,8 +14,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class LearnViewModel @Inject constructor(
+    val savedStateHandle: SavedStateHandle,
     val player: Player,
 ) : ViewModel(), LearnContract {
+
+    val videoUri = savedStateHandle.set("videoUri" , "https://media.b2shelf.com/tutorials/02.mp4")
+
+    init {
+        player.setMediaItem(MediaItem.fromUri(savedStateHandle.get<String>("videoUri")!!))
+        player.prepare()
+    }
+
 
 
     private val _learnState = mutableStateOf(LearnContract.State())
@@ -24,9 +34,7 @@ class LearnViewModel @Inject constructor(
     override val effect: Flow<LearnContract.Effect> = effectChannel.receiveAsFlow()
 
 
-    fun playVideo(url: String) {
-        player.setMediaItem(MediaItem.fromUri(url))
-    }
+
 
     override fun onCleared() {
         super.onCleared()
@@ -37,9 +45,6 @@ class LearnViewModel @Inject constructor(
 
     }
 
-    init {
-        player.prepare()
-    }
 
 
 }
